@@ -90,6 +90,10 @@
     font-size: 14px;
     color: #666;
   }
+    .delete-btn {
+  display: none;
+}
+
 </style>
 
 </head>
@@ -154,7 +158,8 @@
               <p><strong>Course:</strong> ${profile.course}</p>
               <p><strong>Contact:</strong> ${profile.contact}</p>
               <p>${profile.about}</p>
-              <button onclick="deleteProfile('${key}')">Delete</button>
+              <button class="delete-btn" onclick="deleteProfile('${key}')">Delete</button>
+
             `;
             profilesContainer.appendChild(profileDiv);
           });

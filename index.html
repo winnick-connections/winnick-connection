@@ -120,6 +120,36 @@
     font-size: 14px;
   }
 }
+/* ===== Final Polish Styles ===== */
+
+/* Header shadow for depth */
+header {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Search bar styling */
+#search {
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Search bar focus effect */
+#search:focus {
+  outline: none;
+  border-color: #1e88e5;
+  box-shadow: 0 0 8px rgba(30,136,229,0.3);
+}
+
+/* Slight shadow on cards for hover depth */
+.card:hover {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
+}
+
+/* Button shadow on hover for better click feel */
+button:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 
 </style>
 

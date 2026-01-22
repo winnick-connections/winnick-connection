@@ -3,27 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Winnick Connections(zasti)</title>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBwLrCKI3pFQGBp9RHunEOMchratxl5va0",
-  authDomain: "winnickconnection.firebaseapp.com",
-  databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com",
-  projectId: "winnickconnection",
-  storageBucket: "winnickconnection.firebasestorage.app",
-  messagingSenderId: "591164149666",
-  appId: "1:591164149666:web:858da589fbd596948aacfb"
-};
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+  <title>Winnick Connection</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -31,20 +11,17 @@ const firebaseConfig = {
       margin: 0;
       padding: 0;
     }
-
     header {
       background: #1e88e5;
       color: white;
       padding: 20px;
       text-align: center;
     }
-
     main {
       padding: 20px;
       max-width: 800px;
       margin: auto;
     }
-
     .card {
       background: white;
       padding: 15px;
@@ -52,15 +29,12 @@ const firebaseConfig = {
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
     input, textarea, button {
       width: 100%;
       padding: 10px;
       margin-top: 8px;
       margin-bottom: 12px;
-      box-sizing: border-box;
     }
-
     button {
       background: #1e88e5;
       color: white;
@@ -68,11 +42,9 @@ const firebaseConfig = {
       border-radius: 5px;
       cursor: pointer;
     }
-
     button:hover {
       background: #1565c0;
     }
-
     footer {
       text-align: center;
       padding: 15px;
@@ -81,11 +53,9 @@ const firebaseConfig = {
     }
   </style>
 </head>
-
 <body>
-
   <header>
-    <h1>Campus Connect</h1>
+    <h1>Winnick Connection</h1>
     <p>Meet and connect with students on campus</p>
   </header>
 
@@ -106,53 +76,88 @@ const firebaseConfig = {
   </main>
 
   <footer>
-    Campus Connect © 2026 | Built for learning
+    Winnick Connection © 2026 | Built for learning
   </footer>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+
   <script>
-  // Load profiles from Local Storage when the page opens
-  window.onload = function() {
-    const savedProfiles = localStorage.getItem('profiles');
-    if (savedProfiles) {
-      document.getElementById('profiles').innerHTML = savedProfiles;
+    // ===== Replace these values with YOUR Firebase project config =====
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com", // <- your DB URL
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const profilesRef = database.ref('profiles');
+
+    // ===== Load all profiles =====
+    window.onload = function() {
+      profilesRef.on('value', snapshot => {
+        const profilesContainer = document.getElementById('profiles');
+        profilesContainer.innerHTML = '';
+        const profiles = snapshot.val();
+        if (profiles) {
+          Object.entries(profiles).forEach(([key, profile]) => {
+            const profileDiv = document.createElement('div');
+            profileDiv.className = 'card';
+            profileDiv.innerHTML = `
+              <h3>${profile.name}</h3>
+              <p><strong>Course:</strong> ${profile.course}</p>
+              <p><strong>Contact:</strong> ${profile.contact}</p>
+              <p>${profile.about}</p>
+              <button onclick="deleteProfile('${key}')">Delete</button>
+            `;
+            profilesContainer.appendChild(profileDiv);
+          });
+        }
+      });
+    };
+
+    // ===== Add a new profile =====
+    function addProfile() {
+      const name = document.getElementById('name').value;
+      const course = document.getElementById('course').value;
+      const contact = document.getElementById('contact').value;
+      const about = document.getElementById('about').value;
+
+      if (!name || !course || !contact) {
+        alert('Please fill in name, course, and contact');
+        return;
+      }
+
+      profilesRef.push({
+        name: name,
+        course: course,
+        contact: contact,
+        about: about
+      });
+
+      // Clear form
+      document.getElementById('name').value = '';
+      document.getElementById('course').value = '';
+      document.getElementById('contact').value = '';
+      document.getElementById('about').value = '';
     }
-  }
 
-  function addProfile() {
-    const name = document.getElementById('name').value;
-    const course = document.getElementById('course').value;
-    const contact = document.getElementById('contact').value;
-    const about = document.getElementById('about').value;
-
-    if (!name || !course || !contact) {
-      alert('Please fill in name, course, and contact');
-      return;
+    // ===== Delete profile (admin only) =====
+    function deleteProfile(key) {
+      const secret = prompt("Enter admin key to delete profile:");
+      if (secret === "WINNICK_SECRET_KEY") {  // <- change this to your secret
+        profilesRef.child(key).remove();
+        alert("Profile deleted!");
+      } else {
+        alert("Wrong key! You cannot delete profiles.");
+      }
     }
-
-    // Create profile card
-    const profileDiv = document.createElement('div');
-    profileDiv.className = 'card';
-    profileDiv.innerHTML = `
-      <h3>${name}</h3>
-      <p><strong>Course:</strong> ${course}</p>
-      <p><strong>Contact:</strong> ${contact}</p>
-      <p>${about}</p>
-    `;
-
-    // Add to profiles container
-    document.getElementById('profiles').appendChild(profileDiv);
-
-    // Save all profiles to Local Storage
-    localStorage.setItem('profiles', document.getElementById('profiles').innerHTML);
-
-    // Clear form
-    document.getElementById('name').value = '';
-    document.getElementById('course').value = '';
-    document.getElementById('contact').value = '';
-    document.getElementById('about').value = '';
-  }
-</script>
-
-
+  </script>
 </body>
 </html>

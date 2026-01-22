@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Winnick Connections(zasti)</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1e88e5;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1565c0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Campus Connect</h1>
+    <p>Meet and connect with students on campus</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Create Your Profile</h2>
+      <input type="text" id="name" placeholder="Your Name">
+      <input type="text" id="course" placeholder="Course / Program">
+      <input type="text" id="contact" placeholder="Phone or WhatsApp">
+      <textarea id="about" placeholder="About you"></textarea>
+      <button onclick="addProfile()">Add Profile</button>
+    </div>
+
+    <div class="card">
+      <h2>Student Profiles</h2>
+      <div id="profiles"></div>
+    </div>
+  </main>
+
+  <footer>
+    Campus Connect © 2026 | Built for learning
+  </footer>
+
+  <script>
+    function addProfile() {
+      const name = document.getElementById('name').value;
+      const course = document.getElementById('course').value;
+      const contact = document.getElementById('contact').value;
+      const about = document.getElementById('about').value;
+
+      if (!name || !course || !contact) {
+        alert('Please fill in name, course, and contact');
+        return;
+      }
+
+      const profileDiv = document.createElement('div');
+      profileDiv.className = 'card';
+
+      profileDiv.innerHTML = `
+        <h3>${name}</h3>
+        <p><strong>Course:</strong> ${course}</p>
+        <p><strong>Contact:</strong> ${contact}</p>
+        <p>${about}</p>
+      `;
+
+      document.getElementById('profiles').appendChild(profileDiv);
+
+      // Clear form
+      document.getElementById('name').value = '';
+      document.getElementById('course').value = '';
+      document.getElementById('contact').value = '';
+      document.getElementById('about').value = '';
+    }
+  </script>
+
+</body>
+</html>

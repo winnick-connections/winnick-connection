@@ -91,36 +91,49 @@
   </footer>
 
   <script>
-    function addProfile() {
-      const name = document.getElementById('name').value;
-      const course = document.getElementById('course').value;
-      const contact = document.getElementById('contact').value;
-      const about = document.getElementById('about').value;
-
-      if (!name || !course || !contact) {
-        alert('Please fill in name, course, and contact');
-        return;
-      }
-
-      const profileDiv = document.createElement('div');
-      profileDiv.className = 'card';
-
-      profileDiv.innerHTML = `
-        <h3>${name}</h3>
-        <p><strong>Course:</strong> ${course}</p>
-        <p><strong>Contact:</strong> ${contact}</p>
-        <p>${about}</p>
-      `;
-
-      document.getElementById('profiles').appendChild(profileDiv);
-
-      // Clear form
-      document.getElementById('name').value = '';
-      document.getElementById('course').value = '';
-      document.getElementById('contact').value = '';
-      document.getElementById('about').value = '';
+  // Load profiles from Local Storage when the page opens
+  window.onload = function() {
+    const savedProfiles = localStorage.getItem('profiles');
+    if (savedProfiles) {
+      document.getElementById('profiles').innerHTML = savedProfiles;
     }
-  </script>
+  }
+
+  function addProfile() {
+    const name = document.getElementById('name').value;
+    const course = document.getElementById('course').value;
+    const contact = document.getElementById('contact').value;
+    const about = document.getElementById('about').value;
+
+    if (!name || !course || !contact) {
+      alert('Please fill in name, course, and contact');
+      return;
+    }
+
+    // Create profile card
+    const profileDiv = document.createElement('div');
+    profileDiv.className = 'card';
+    profileDiv.innerHTML = `
+      <h3>${name}</h3>
+      <p><strong>Course:</strong> ${course}</p>
+      <p><strong>Contact:</strong> ${contact}</p>
+      <p>${about}</p>
+    `;
+
+    // Add to profiles container
+    document.getElementById('profiles').appendChild(profileDiv);
+
+    // Save all profiles to Local Storage
+    localStorage.setItem('profiles', document.getElementById('profiles').innerHTML);
+
+    // Clear form
+    document.getElementById('name').value = '';
+    document.getElementById('course').value = '';
+    document.getElementById('contact').value = '';
+    document.getElementById('about').value = '';
+  }
+</script>
+
 
 </body>
 </html>

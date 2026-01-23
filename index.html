@@ -244,6 +244,23 @@ button:hover {
     const app = firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const profilesRef = database.ref('profiles');
+function uploadPhoto(key) {
+  const fileInput = document.getElementById(`photo-${key}`);
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Please select a photo to upload.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const photoURL = e.target.result;
+    profilesRef.child(key).update({ photo: photoURL });
+    alert("Photo uploaded!");
+  };
+  reader.readAsDataURL(file);
+}
 
    // ===== Load all profiles (with photo or placeholder) =====
 window.onload = function() {
@@ -253,30 +270,41 @@ window.onload = function() {
     const profiles = snapshot.val();
 
     if (profiles) {
-      Object.values(profiles).forEach(profile => {
+      Object.entries(profiles).forEach(([key, profile]) => {
         const profileDiv = document.createElement('div');
         profileDiv.className = 'card';
 
-        // Use the uploaded photo or a default placeholder
-        const photoURL = profile.photo 
-          ? profile.photo 
-          : 'https://via.placeholder.com/80?text=No+Photo';
+        // Create a photo section
+        let photoSection = '';
+        if (profile.photo && profile.photo !== "") {
+          photoSection = `<img src="${profile.photo}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-right:15px;">`;
+        } else {
+          // Show upload input for students without photo
+          photoSection = `
+            <input type="file" id="photo-${key}" accept="image/*">
+            <button onclick="uploadPhoto('${key}')">Add Photo</button>
+          `;
+        }
 
         profileDiv.innerHTML = `
-          <img src="${photoURL}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:8px;">
-          <h3>${profile.name}</h3>
-          <p><strong>Course:</strong> ${profile.course}</p>
-          <p><strong>Contact:</strong> 
-            <a 
-              href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
-              target="_blank"
-              class="whatsapp-btn"
-            >
-              <i class="fa-brands fa-whatsapp"></i> WhatsApp
-            </a> |
-            <a href="tel:${profile.contact}">Call</a>
-          </p>
-          <p>${profile.about}</p>
+          <div style="display:flex; align-items:center; gap:15px;">
+            ${photoSection}
+            <div style="flex:1;">
+              <h3>${profile.name}</h3>
+              <p><strong>Course:</strong> ${profile.course}</p>
+              <p><strong>Contact:</strong> 
+                <a 
+                  href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
+                  target="_blank"
+                  class="whatsapp-btn"
+                >
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a> |
+                <a href="tel:${profile.contact}">Call</a>
+              </p>
+              <p>${profile.about}</p>
+            </div>
+          </div>
         `;
 
         profilesContainer.appendChild(profileDiv);
@@ -284,6 +312,7 @@ window.onload = function() {
     }
   });
 };
+
 
 
 

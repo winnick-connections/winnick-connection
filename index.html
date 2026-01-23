@@ -73,6 +73,7 @@
     outline: none;
     border-color: #1e88e5;
   }
+<input type="file" id="photo" accept="image/*">
 
   button {
     background: #1e88e5;
@@ -257,22 +258,22 @@ window.onload = function() {
         const profileDiv = document.createElement('div');
         profileDiv.className = 'card';
         profileDiv.innerHTML = `
-          <h3>${profile.name}</h3>
-          <p><strong>Course:</strong> ${profile.course}</p>
-          <p><strong>Contact:</strong> 
-            <a 
-  href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
-  target="_blank"
-  class="whatsapp-btn"
->
-  <i class="fa-brands fa-whatsapp"></i> WhatsApp
-</a>
+  ${profile.photo ? `<img src="${profile.photo}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:8px;">` : ""}
+  <h3>${profile.name}</h3>
+  <p><strong>Course:</strong> ${profile.course}</p>
+  <p><strong>Contact:</strong> 
+    <a 
+      href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
+      target="_blank"
+      class="whatsapp-btn"
+    >
+      <i class="fa-brands fa-whatsapp"></i> WhatsApp
+    </a> |
+    <a href="tel:${profile.contact}">Call</a>
+  </p>
+  <p>${profile.about}</p>
+`;
 
-            |
-            <a href="tel:${profile.contact}">Call</a>
-          </p>
-          <p>${profile.about}</p>
-        `;
         profilesContainer.appendChild(profileDiv);
       });
     }
@@ -280,51 +281,59 @@ window.onload = function() {
 };
 
 
-    // ===== Add a new profile =====
-    function addProfile() {
-      const name = document.getElementById('name').value;
-      const course = document.getElementById('course').value;
-      const contact = document.getElementById('contact').value;
-      const about = document.getElementById('about').value;
+    // ===== Add a new profile with optional photo =====
+function addProfile() {
+  const name = document.getElementById('name').value;
+  const course = document.getElementById('course').value;
+  const contact = document.getElementById('contact').value;
+  const about = document.getElementById('about').value;
+  const photoFile = document.getElementById('photo').files[0]; // Get the uploaded photo
 
-      if (!name || !course || !contact) {
-        alert('Please fill in name, course, and contact');
-        return;
-      }
+  if (!name || !course || !contact) {
+    alert('Please fill in name, course, and contact');
+    return;
+  }
 
+  if (photoFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const photoURL = e.target.result; // Convert photo to Base64
+
+      // Save profile with photo
       profilesRef.push({
         name: name,
         course: course,
         contact: contact,
-        about: about
+        about: about,
+        photo: photoURL
       });
 
-      // Clear form
-      document.getElementById('name').value = '';
-      document.getElementById('course').value = '';
-      document.getElementById('contact').value = '';
-      document.getElementById('about').value = '';
+      clearForm();
     }
+    reader.readAsDataURL(photoFile);
+  } else {
+    // No photo selected
+    profilesRef.push({
+      name: name,
+      course: course,
+      contact: contact,
+      about: about,
+      photo: ""
+    });
 
-    // ===== Delete profile (admin only) =====
-    function deleteProfile(key) {
-      const secret = prompt("Enter admin key to delete profile:");
-      if (secret === "WINNICK_SECRET_KEY") {  // <- change this to your secret
-        profilesRef.child(key).remove();
-        alert("Profile deleted!");
-      } else {
-        alert("Wrong key! You cannot delete profiles.");
-      }
-    }
-    function searchProfiles() {
-  const searchText = document.getElementById('search').value.toLowerCase();
-  const cards = document.querySelectorAll('#profiles .card');
-
-  cards.forEach(card => {
-    const text = card.innerText.toLowerCase();
-    card.style.display = text.includes(searchText) ? 'block' : 'none';
-  });
+    clearForm();
+  }
 }
+
+// ===== Clear form after submit =====
+function clearForm() {
+  document.getElementById('name').value = '';
+  document.getElementById('course').value = '';
+  document.getElementById('contact').value = '';
+  document.getElementById('about').value = '';
+  document.getElementById('photo').value = '';
+}
+
 
   </script>
 </body>

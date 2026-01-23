@@ -193,6 +193,18 @@ button:hover {
 
   <main>
     <div class="card">
+  <h2>Welcome to Winnick Connection</h2>
+  <p>
+    Winnick Connection is a student-built platform designed to help students
+    connect, communicate, and support one another on campus.
+  </p>
+  <p>
+    Add your profile, find fellow students, and reach out easily using
+    WhatsApp or direct calls.
+  </p>
+</div>
+
+    <div class="card">
       <h2>Create Your Profile</h2>
       <input type="text" id="name" placeholder="Your Name">
       <input type="text" id="course" placeholder="Course / Program">
@@ -255,9 +267,11 @@ window.onload = function() {
           <h3>${profile.name}</h3>
           <p><strong>Course:</strong> ${profile.course}</p>
           <p><strong>Contact:</strong> 
-            <a class="whatsapp-btn" 
-               href="https://wa.me/${profile.contact.replace(/[^0-9]/g,'')}" 
-               target="_blank">
+            <a 
+  href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
+  target="_blank"
+>
+
                WhatsApp
             </a>
             |

@@ -168,6 +168,15 @@ button:hover {
 .whatsapp-btn:hover {
   background-color: #1ebe57; /* Slightly darker green on hover */
 }
+.whatsapp-btn {
+  color: #25D366; /* Official WhatsApp green */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.whatsapp-btn:hover {
+  text-decoration: underline;
+}
 
 </style>
 
@@ -227,7 +236,7 @@ button:hover {
     const database = firebase.database();
     const profilesRef = database.ref('profiles');
 
-    // ===== Load all profiles (NO DELETE BUTTON) =====
+    // ===== Load all profiles (WhatsApp green, NO delete button) =====
 window.onload = function() {
   profilesRef.on('value', snapshot => {
     const profilesContainer = document.getElementById('profiles');
@@ -242,7 +251,12 @@ window.onload = function() {
           <h3>${profile.name}</h3>
           <p><strong>Course:</strong> ${profile.course}</p>
           <p><strong>Contact:</strong> 
-            <a href="https://wa.me/${profile.contact.replace(/[^0-9]/g,'')}" target="_blank">WhatsApp</a> | 
+            <a class="whatsapp-btn" 
+               href="https://wa.me/${profile.contact.replace(/[^0-9]/g,'')}" 
+               target="_blank">
+               WhatsApp
+            </a>
+            |
             <a href="tel:${profile.contact}">Call</a>
           </p>
           <p>${profile.about}</p>
@@ -252,6 +266,7 @@ window.onload = function() {
     }
   });
 };
+
 
     // ===== Add a new profile =====
     function addProfile() {

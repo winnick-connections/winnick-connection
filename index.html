@@ -245,7 +245,7 @@ button:hover {
     const database = firebase.database();
     const profilesRef = database.ref('profiles');
 
-    // ===== Load all profiles (WhatsApp green, NO delete button) =====
+   // ===== Load all profiles (with photo or placeholder) =====
 window.onload = function() {
   profilesRef.on('value', snapshot => {
     const profilesContainer = document.getElementById('profiles');
@@ -256,28 +256,35 @@ window.onload = function() {
       Object.values(profiles).forEach(profile => {
         const profileDiv = document.createElement('div');
         profileDiv.className = 'card';
+
+        // Use the uploaded photo or a default placeholder
+        const photoURL = profile.photo 
+          ? profile.photo 
+          : 'https://via.placeholder.com/80?text=No+Photo';
+
         profileDiv.innerHTML = `
-  ${profile.photo ? `<img src="${profile.photo}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:8px;">` : ""}
-  <h3>${profile.name}</h3>
-  <p><strong>Course:</strong> ${profile.course}</p>
-  <p><strong>Contact:</strong> 
-    <a 
-      href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
-      target="_blank"
-      class="whatsapp-btn"
-    >
-      <i class="fa-brands fa-whatsapp"></i> WhatsApp
-    </a> |
-    <a href="tel:${profile.contact}">Call</a>
-  </p>
-  <p>${profile.about}</p>
-`;
+          <img src="${photoURL}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:8px;">
+          <h3>${profile.name}</h3>
+          <p><strong>Course:</strong> ${profile.course}</p>
+          <p><strong>Contact:</strong> 
+            <a 
+              href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" 
+              target="_blank"
+              class="whatsapp-btn"
+            >
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a> |
+            <a href="tel:${profile.contact}">Call</a>
+          </p>
+          <p>${profile.about}</p>
+        `;
 
         profilesContainer.appendChild(profileDiv);
       });
     }
   });
 };
+
 
 
     // ===== Add a new profile with optional photo =====

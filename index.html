@@ -199,27 +199,26 @@ button:hover {
 </div>
 
     <div class="card">
-      <h2>Create Your Profile</h2>
-      <input type="text" id="name" placeholder="Your Name">
-      <input type="text" id="course" placeholder="Course / Program">
-      <input type="text" id="contact" placeholder="Phone or WhatsApp">
-      <textarea id="about" placeholder="About you"></textarea>
-      <button onclick="addProfile()">Add Profile</button>
-    </div>
+  <h2>Create Your Profile</h2>
+  <input type="text" id="name" placeholder="Your Name">
+  <input type="text" id="course" placeholder="Course / Program">
+  <input type="text" id="contact" placeholder="Phone or WhatsApp">
+  <textarea id="about" placeholder="About you"></textarea>
+  <input type="file" id="photo" accept="image/*">
+  <button onclick="addProfile()">Add Profile</button>
+</div>
 
-    <div class="card">
-      <h2>Student Profiles</h2>
+<div class="card">
+  <h2>Student Profiles</h2>
+  <input
+    type="text"
+    id="search"
+    placeholder="Search by name or course..."
+    onkeyup="searchProfiles()"
+  />
+  <div id="profiles"></div>
+</div>
 
-<input
-  type="text"
-  id="search"
-  placeholder="Search by name or course..."
-  onkeyup="searchProfiles()"
-/>
-
-<div id="profiles"></div>
-
-    </div>
   </main>
 
   <footer>

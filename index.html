@@ -227,25 +227,25 @@ button:hover {
     const database = firebase.database();
     const profilesRef = database.ref('profiles');
 
-    // ===== Load all profiles =====
+    // ===== Load all profiles (NO DELETE BUTTON) =====
 window.onload = function() {
   profilesRef.on('value', snapshot => {
     const profilesContainer = document.getElementById('profiles');
     profilesContainer.innerHTML = '';
     const profiles = snapshot.val();
+
     if (profiles) {
-      Object.entries(profiles).forEach(([key, profile]) => {
+      Object.values(profiles).forEach(profile => {
         const profileDiv = document.createElement('div');
         profileDiv.className = 'card';
         profileDiv.innerHTML = `
           <h3>${profile.name}</h3>
           <p><strong>Course:</strong> ${profile.course}</p>
           <p><strong>Contact:</strong> 
-            <a href="https://wa.me/${profile.contact}" target="_blank">WhatsApp</a> | 
+            <a href="https://wa.me/${profile.contact.replace(/[^0-9]/g,'')}" target="_blank">WhatsApp</a> | 
             <a href="tel:${profile.contact}">Call</a>
           </p>
           <p>${profile.about}</p>
-          <button onclick="deleteProfile('${key}')">Delete</button>
         `;
         profilesContainer.appendChild(profileDiv);
       });

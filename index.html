@@ -176,150 +176,141 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
- <script>
-  // Firebase config (UNCHANGED – DATA SAFE)
-  const firebaseConfig = {
-    apiKey: "AIzaSyBwLrCKI3pFQGBp9RHunEOMchratxl5va0",
-    authDomain: "winnickconnection.firebaseapp.com",
-    databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com",
-    projectId: "winnickconnection",
-    storageBucket: "winnickconnection.firebasestorage.app",
-    messagingSenderId: "591164149666",
-    appId: "1:591164149666:web:858da589fbd596948aacfb"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-  const profilesRef = database.ref("profiles");
-
-  // PAGE NAVIGATION (NEW)
-  function showPage(page) {
-    const pages = document.querySelectorAll(".page");
-    pages.forEach(p => p.style.display = "none");
-
-    if (page === "profiles") {
-      document.getElementById("profiles").style.display = "block";
-      document.getElementById("profiles-list").style.display = "block";
-    } else {
-      document.getElementById(page).style.display = "block";
-    }
-  }
-
-  // ADD PROFILE
-  function addProfile() {
-    const name = document.getElementById("name").value.trim();
-    const course = document.getElementById("course").value.trim();
-    const contact = document.getElementById("contact").value.trim();
-    const about = document.getElementById("about").value.trim();
-    const photoInput = document.getElementById("photo");
-
-    if (!name || !course || !contact) {
-      alert("Please fill name, course and contact");
-      return;
-    }
-
-    if (photoInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        saveProfile(e.target.result);
-      };
-      reader.readAsDataURL(photoInput.files[0]);
-    } else {
-      saveProfile("");
-    }
-
-    function saveProfile(photoURL) {
-      profilesRef.push({
-        name,
-        course,
-        contact,
-        about,
-        photo: photoURL
-      });
-
-      document.getElementById("name").value = "";
-      document.getElementById("course").value = "";
-      document.getElementById("contact").value = "";
-      document.getElementById("about").value = "";
-      document.getElementById("photo").value = "";
-    }
-  }
-
-  // UPLOAD PHOTO FOR EXISTING PROFILE
-  function uploadPhoto(key) {
-    const input = document.getElementById(`photo-${key}`);
-    const file = input.files[0];
-
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      profilesRef.child(key).update({ photo: e.target.result });
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwLrCKI3pFQGBp9RHunEOMchratxl5va0",
+      authDomain: "winnickconnection.firebaseapp.com",
+      databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com",
+      projectId: "winnickconnection",
+      storageBucket: "winnickconnection.firebasestorage.app",
+      messagingSenderId: "591164149666",
+      appId: "1:591164149666:web:858da589fbd596948aacfb"
     };
-    reader.readAsDataURL(file);
-  }
 
-  // SEARCH
-  function searchProfiles() {
-    const text = document.getElementById("search").value.toLowerCase();
-    document.querySelectorAll("#profiles .card").forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(text)
-        ? "block"
-        : "none";
-    });
-  }
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const profilesRef = database.ref('profiles');
 
-  // LOAD PROFILES
-  window.onload = function () {
-    showPage("home");
+    // Add Profile
+    function addProfile() {
+      const name = document.getElementById('name').value;
+      const course = document.getElementById('course').value;
+      const contact = document.getElementById('contact').value;
+      const about = document.getElementById('about').value;
+      const photoInput = document.getElementById('photo');
+      let photoURL = "";
 
-    profilesRef.on("value", snapshot => {
-      const container = document.getElementById("profiles");
-      container.innerHTML = "";
+      if (photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          photoURL = e.target.result;
+          saveProfile();
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        saveProfile();
+      }
 
-      const data = snapshot.val();
-      if (!data) return;
-
-      Object.entries(data).forEach(([key, profile]) => {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        let photoHTML = "";
-        if (profile.photo) {
-          photoHTML = `<img src="${profile.photo}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">`;
-        } else {
-          photoHTML = `
-            <label style="font-size:12px;color:#1e88e5;cursor:pointer;border:1px solid #1e88e5;padding:4px 6px;border-radius:4px;">
-              + Add Photo
-              <input type="file" id="photo-${key}" accept="image/*" style="display:none" onchange="uploadPhoto('${key}')">
-            </label>
-          `;
+      function saveProfile() {
+        if (!name || !course || !contact) {
+          alert('Please fill in name, course, and contact');
+          return;
         }
 
-        card.innerHTML = `
-          <div style="display:flex;gap:12px;align-items:center;">
-            ${photoHTML}
-            <div style="flex:1;">
-              <h3 style="margin:0">${profile.name}</h3>
-              <p><strong>Course:</strong> ${profile.course}</p>
-              <p>
-                <a class="whatsapp-btn" target="_blank"
-                   href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}">
-                  <i class="fa-brands fa-whatsapp"></i> WhatsApp
-                </a>
-                |
-                <a href="tel:${profile.contact}">Call</a>
-              </p>
-              <p>${profile.about || ""}</p>
-            </div>
-          </div>
-        `;
+        profilesRef.push({
+          name: name,
+          course: course,
+          contact: contact,
+          about: about,
+          photo: photoURL
+        });
 
-        container.appendChild(card);
+        // Clear form
+        document.getElementById('name').value = '';
+        document.getElementById('course').value = '';
+        document.getElementById('contact').value = '';
+        document.getElementById('about').value = '';
+        document.getElementById('photo').value = '';
+      }
+    }
+
+    // Upload Photo for existing students without photo
+    function uploadPhoto(key) {
+      const fileInput = document.getElementById(`photo-${key}`);
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select a photo to upload.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const photoURL = e.target.result;
+        profilesRef.child(key).update({ photo: photoURL });
+        alert("Photo uploaded!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Search Profiles
+    function searchProfiles() {
+      const searchText = document.getElementById('search').value.toLowerCase();
+      const cards = document.querySelectorAll('#profiles .card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(searchText) ? 'block' : 'none';
       });
-    });
-  };
-</script>
+    }
 
+    // Load Profiles
+    window.onload = function() {
+      profilesRef.on('value', snapshot => {
+        const profilesContainer = document.getElementById('profiles');
+        profilesContainer.innerHTML = '';
+        const profiles = snapshot.val();
+
+        if (profiles) {
+          Object.entries(profiles).forEach(([key, profile]) => {
+            const profileDiv = document.createElement('div');
+            profileDiv.className = 'card';
+
+            // Photo or small Add Photo button
+            let photoSection = '';
+            if (profile.photo && profile.photo !== "") {
+              photoSection = `<img src="${profile.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">`;
+            } else {
+              photoSection = `
+                <label for="photo-${key}" style="cursor:pointer; font-size:12px; color:#1e88e5; font-weight:bold; display:inline-block; border:1px solid #1e88e5; padding:4px 6px; border-radius:4px;">
+                  + Add Photo
+                </label>
+                <input type="file" id="photo-${key}" accept="image/*" style="display:none;" onchange="uploadPhoto('${key}')">
+              `;
+            }
+
+            profileDiv.innerHTML = `
+              <div style="display:flex; align-items:center; gap:12px;">
+                ${photoSection}
+                <div style="flex:1;">
+                  <h3 style="margin:0; font-size:16px;">${profile.name}</h3>
+                  <p style="margin:2px 0; font-size:14px;"><strong>Course:</strong> ${profile.course}</p>
+                  <p style="margin:2px 0; font-size:14px;">
+                    <a href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" target="_blank" class="whatsapp-btn">
+                      <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                    </a> |
+                    <a href="tel:${profile.contact}">Call</a>
+                  </p>
+                  <p style="margin:2px 0; font-size:14px;">${profile.about}</p>
+                </div>
+              </div>
+            `;
+
+            profilesContainer.appendChild(profileDiv);
+          });
+        }
+      });
+    };
+  </script>
 </body>
 </html>

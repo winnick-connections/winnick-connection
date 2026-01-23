@@ -150,6 +150,21 @@ header {
 button:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+.whatsapp-btn {
+  display: inline-block;
+  background-color: #25D366; /* WhatsApp green */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1ebe57; /* Slightly darker green on hover */
+}
 
 </style>
 
@@ -222,8 +237,12 @@ button:hover {
             profileDiv.innerHTML = `
               <h3>${profile.name}</h3>
               <p><strong>Course:</strong> ${profile.course}</p>
-              <p><strong>Contact:</strong> ${profile.contact}</p>
-              <p>${profile.about}</p>
+              <p><strong>Contact:</strong> 
+  <a href="https://wa.me/${profile.contact}" target="_blank" class="whatsapp-btn">
+    Message on WhatsApp
+  </a>
+</p>
+
               <button class="delete-btn" onclick="deleteProfile('${key}')">Delete</button>
 
             `;

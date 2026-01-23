@@ -235,17 +235,17 @@ button:hover {
             const profileDiv = document.createElement('div');
             profileDiv.className = 'card';
             profileDiv.innerHTML = `
-              <h3>${profile.name}</h3>
-              <p><strong>Course:</strong> ${profile.course}</p>
-              <p><strong>Contact:</strong> 
-  <a href="https://wa.me/${profile.contact}" target="_blank" class="whatsapp-btn">
-    Message on WhatsApp
-  </a>
-</p>
+  <h3>${profile.name}</h3>
+  <p><strong>Course:</strong> ${profile.course}</p>
+  <p><strong>Contact:</strong> 
+    <a href="https://wa.me/${profile.contact}" target="_blank" class="whatsapp-btn">
+      Message on WhatsApp
+    </a>
+  </p>
+  <p>${profile.about}</p>
+  <button class="delete-btn" onclick="deleteProfile('${key}')">Delete</button>
+`;
 
-              <button class="delete-btn" onclick="deleteProfile('${key}')">Delete</button>
-
-            `;
             profilesContainer.appendChild(profileDiv);
           });
         }

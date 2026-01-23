@@ -131,41 +131,62 @@
 
 <body>
   <header>
+    <div style="text-align:center; padding:10px; background:#f1f5fb;">
+  <button onclick="showPage('homePage')">Home</button>
+  <button onclick="showPage('profilePage')">Add Profile</button>
+  <button onclick="showPage('profilesPage')">Profiles</button>
+  <button onclick="showPage('aboutPage')">About</button>
+</div>
+
     <h1>Winnick Connection</h1>
     <p>Meet and connect with students on campus</p>
   </header>
 
   <main>
-    <!-- Welcome Card -->
-    <div class="card">
-      <h2>Welcome to Winnick Connection</h2>
-      <p>
-        Winnick Connection is a student-built platform to help students
-        connect, communicate, and support one another on campus.
-      </p>
-      <p>
-        Add your profile, find fellow students, and reach out easily using
-        WhatsApp or direct calls.
-      </p>
-    </div>
+  <!-- Home Page -->
+<div class="card page" id="homePage">
+  <h2>Welcome to Winnick Connection</h2>
+  <p>
+    Winnick Connection is a student-built platform to help students
+    connect, communicate, and support one another on campus.
+  </p>
+  <p>
+    Add your profile, find fellow students, and reach out easily using
+    WhatsApp or direct calls.
+  </p>
+</div>
 
-    <!-- Create Profile Card -->
-    <div class="card">
-      <h2>Create Your Profile</h2>
-      <input type="text" id="name" placeholder="Your Name">
-      <input type="text" id="course" placeholder="Course / Program">
-      <input type="text" id="contact" placeholder="Phone or WhatsApp">
-      <textarea id="about" placeholder="About you"></textarea>
-      <input type="file" id="photo" accept="image/*">
-      <button onclick="addProfile()">Add Profile</button>
-    </div>
+<!-- Create Profile Page -->
+<div class="card page" id="profilePage" style="display:none;">
+  <h2>Create Your Profile</h2>
+  <input type="text" id="name" placeholder="Your Name">
+  <input type="text" id="course" placeholder="Course / Program">
+  <input type="text" id="contact" placeholder="Phone or WhatsApp">
+  <textarea id="about" placeholder="About you"></textarea>
+  <input type="file" id="photo" accept="image/*">
+  <button onclick="addProfile()">Add Profile</button>
+</div>
 
-    <!-- Student Profiles Card -->
-    <div class="card">
-      <h2>Student Profiles</h2>
-      <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
-      <div id="profiles"></div>
-    </div>
+<!-- About Page -->
+<div class="card page" id="aboutPage" style="display:none;">
+  <h2>About Winnick Connection</h2>
+  <p>
+    This platform was built by a student, for students,
+    to help campus communities stay connected.
+  </p>
+  <p>
+    Suggestions and improvements are welcome so the system
+    can grow better together.
+  </p>
+</div>
+
+<!-- Profiles Page -->
+<div class="card page" id="profilesPage" style="display:none;">
+  <h2>Student Profiles</h2>
+  <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
+  <div id="profiles"></div>
+</div>
+  
   </main>
 
   <footer>
@@ -306,11 +327,21 @@
               </div>
             `;
 
+
             profilesContainer.appendChild(profileDiv);
           });
         }
       });
     };
+    // Page navigation (SAFE – UI ONLY)
+function showPage(pageId) {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(page => {
+    page.style.display = 'none';
+  });
+
+  document.getElementById(pageId).style.display = 'block';
+}
   </script>
 </body>
 </html>

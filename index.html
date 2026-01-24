@@ -118,6 +118,38 @@
       background-color: #1ebe5d;
     }
 
+    /* Modal styles for image zoom */
+    #imageModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    #imageModal img {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      margin-top: 5%;
+      border-radius: 12px;
+    }
+
+    #imageModal span {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     @media only screen and (max-width: 600px) {
       header h1 { font-size: 26px; }
       header p { font-size: 14px; }
@@ -132,62 +164,67 @@
 <body>
   <header>
     <div style="text-align:center; padding:10px; background:#f1f5fb;">
-  <button onclick="showPage('homePage')">Home</button>
-  <button onclick="showPage('profilePage')">Add Profile</button>
-  <button onclick="showPage('profilesPage')">Profiles</button>
-  <button onclick="showPage('aboutPage')">About</button>
-</div>
+      <button onclick="showPage('homePage')">Home</button>
+      <button onclick="showPage('profilePage')">Add Profile</button>
+      <button onclick="showPage('profilesPage')">Profiles</button>
+      <button onclick="showPage('aboutPage')">About</button>
+    </div>
 
     <h1>Winnick Connection</h1>
     <p>Meet and connect with students on campus</p>
   </header>
 
   <main>
-  <!-- Home Page -->
-<div class="card page" id="homePage">
-  <h2>Welcome to Winnick Connection</h2>
-  <p>
-    Winnick Connection is a student-built platform to help students
-    connect, communicate, and support one another on campus.
-  </p>
-  <p>
-    Add your profile, find fellow students, and reach out easily using
-    WhatsApp or direct calls.
-  </p>
-</div>
+    <!-- Home Page -->
+    <div class="card page" id="homePage">
+      <h2>Welcome to Winnick Connection</h2>
+      <p>
+        Winnick Connection is a student-built platform to help students
+        connect, communicate, and support one another on campus.
+      </p>
+      <p>
+        Add your profile, find fellow students, and reach out easily using
+        WhatsApp or direct calls.
+      </p>
+    </div>
 
-<!-- Create Profile Page -->
-<div class="card page" id="profilePage" style="display:none;">
-  <h2>Create Your Profile</h2>
-  <input type="text" id="name" placeholder="Your Name">
-  <input type="text" id="course" placeholder="Course / Program">
-  <input type="text" id="contact" placeholder="Phone or WhatsApp">
-  <textarea id="about" placeholder="About you"></textarea>
-  <input type="file" id="photo" accept="image/*">
-  <button onclick="addProfile()">Add Profile</button>
-</div>
+    <!-- Create Profile Page -->
+    <div class="card page" id="profilePage" style="display:none;">
+      <h2>Create Your Profile</h2>
+      <input type="text" id="name" placeholder="Your Name">
+      <input type="text" id="course" placeholder="Course / Program">
+      <input type="text" id="contact" placeholder="Phone or WhatsApp">
+      <textarea id="about" placeholder="About you"></textarea>
+      <input type="file" id="photo" accept="image/*">
+      <button onclick="addProfile()">Add Profile</button>
+    </div>
 
-<!-- About Page -->
-<div class="card page" id="aboutPage" style="display:none;">
-  <h2>About Winnick Connection</h2>
-  <p>
-    This platform was built by a student, for students,
-    to help campus communities stay connected.
-  </p>
-  <p>
-    Suggestions and improvements are welcome so the system
-    can grow better together.
-  </p>
-</div>
+    <!-- About Page -->
+    <div class="card page" id="aboutPage" style="display:none;">
+      <h2>About Winnick Connection</h2>
+      <p>
+        This platform was built by a student, for students,
+        to help campus communities stay connected.
+      </p>
+      <p>
+        Suggestions and improvements are welcome so the system
+        can grow better together.
+      </p>
+    </div>
 
-<!-- Profiles Page -->
-<div class="card page" id="profilesPage" style="display:none;">
-  <h2>Student Profiles</h2>
-  <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
-  <div id="profiles"></div>
-</div>
-  
+    <!-- Profiles Page -->
+    <div class="card page" id="profilesPage" style="display:none;">
+      <h2>Student Profiles</h2>
+      <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
+      <div id="profiles"></div>
+    </div>
   </main>
+
+  <!-- Modal for zooming image -->
+  <div id="imageModal">
+    <span onclick="closeModal()">&times;</span>
+    <img id="modalImg" src="">
+  </div>
 
   <footer>
     Winnick Connection © 2026 | Built for learning
@@ -285,7 +322,7 @@
       });
     }
 
-    // Load Profiles
+    // Load Profiles and add click-to-enlarge for images
     window.onload = function() {
       profilesRef.on('value', snapshot => {
         const profilesContainer = document.getElementById('profiles');
@@ -300,7 +337,7 @@
             // Photo or small Add Photo button
             let photoSection = '';
             if (profile.photo && profile.photo !== "") {
-              photoSection = `<img src="${profile.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">`;
+              photoSection = `<img src="${profile.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; cursor:pointer;" onclick="openModal('${profile.photo}')">`;
             } else {
               photoSection = `
                 <label for="photo-${key}" style="cursor:pointer; font-size:12px; color:#1e88e5; font-weight:bold; display:inline-block; border:1px solid #1e88e5; padding:4px 6px; border-radius:4px;">
@@ -327,21 +364,31 @@
               </div>
             `;
 
-
             profilesContainer.appendChild(profileDiv);
           });
         }
       });
     };
-    // Page navigation (SAFE – UI ONLY)
-function showPage(pageId) {
-  const pages = document.querySelectorAll('.page');
-  pages.forEach(page => {
-    page.style.display = 'none';
-  });
 
-  document.getElementById(pageId).style.display = 'block';
-}
+    // Page navigation (SAFE – UI ONLY)
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => {
+        page.style.display = 'none';
+      });
+      document.getElementById(pageId).style.display = 'block';
+    }
+
+    // Open modal to show big image
+    function openModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('imageModal').style.display = 'block';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
   </script>
 </body>
 </html>

@@ -23,7 +23,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    header h1 { margin:0; font-size:32px; letter-spacing:1px; }
+    header h1 { margin:0; font-size:32px; }
     header p { margin-top:8px; opacity:0.9; }
 
     main { padding:30px 15px; max-width:900px; margin:auto; }
@@ -34,313 +34,201 @@
       margin-bottom:20px;
       border-radius:12px;
       box-shadow:0 10px 25px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    }
-
-    .card h2 { margin-top:0; color:#1e88e5; }
-    .card h3 { margin-bottom:5px; color:#1565c0; }
 
     input, textarea, #search {
       width:100%; padding:12px; margin:8px 0 14px 0;
-      border-radius:8px; border:1px solid #ccc; font-size:14px;
-    }
-
-    input:focus, textarea:focus, #search:focus {
-      outline:none;
-      border-color:#1e88e5;
-      box-shadow:0 0 8px rgba(30,136,229,0.3);
+      border-radius:8px; border:1px solid #ccc;
     }
 
     button {
       background:#1e88e5; color:white; border:none;
-      border-radius:8px; padding:12px; font-size:15px;
-      cursor:pointer; transition: background 0.3s ease, box-shadow 0.3s ease;
+      border-radius:8px; padding:12px;
+      cursor:pointer;
     }
-
-    button:hover {
-      background:#1565c0;
-      box-shadow:0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    footer { text-align:center; padding:20px; font-size:14px; color:#666; }
-
-    .delete-btn { display:none; }
 
     .whatsapp-btn {
-      display:inline-flex; align-items:center; gap:6px;
-      background-color:#25D366; color:white; padding:6px 10px;
-      border-radius:6px; text-decoration:none; font-weight:700; font-size:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      background:#25D366;
+      color:white;
+      padding:6px 10px;
+      border-radius:6px;
+      text-decoration:none;
+      font-weight:bold;
     }
 
-    .whatsapp-btn:hover { background-color:#1ebe5d; }
+    footer { text-align:center; padding:20px; color:#666; }
 
-    .feature-card { cursor:pointer; text-align:center; }
-    .feature-card i { font-size:40px; color:#1e88e5; margin-bottom:10px; }
-    .feature-card h3 { margin-top:0; font-size:18px; color:#1565c0; }
-
-    @media only screen and (max-width:600px) {
-      header h1{font-size:26px;} header p{font-size:14px;}
-      main{padding:20px 10px;}
-      .card{padding:15px;}
-      input,textarea,#search,button{font-size:13px;padding:10px;}
-      button{font-size:14px;}
-    }
-
-    /* Welcome popup modal */
-    #welcomeModal {
-      position:fixed; top:0; left:0; width:100%; height:100%;
+    /* Welcome popup */
+    #welcomeModal, #profileAddedModal {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
       background:rgba(0,0,0,0.6);
-      display:flex; align-items:center; justify-content:center;
-      z-index:9999; display:none;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
     }
 
-    #welcomeModal .modal-content {
-      background:white; padding:30px; border-radius:12px;
-      text-align:center; max-width:400px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    .modal-box {
+      background:white;
+      padding:25px;
+      border-radius:12px;
+      text-align:center;
+      max-width:360px;
     }
 
-    #welcomeModal .modal-content h2 { color:#1e88e5; margin-bottom:15px; }
-    #welcomeModal .modal-content p { margin-bottom:20px; }
-    #welcomeModal .close-btn {
-      background:#1e88e5; color:white; padding:10px 20px;
-      border-radius:8px; cursor:pointer; border:none;
-    }
-    #welcomeModal .close-btn:hover { background:#1565c0; }
-
-    /* Lightbox for full photo */
+    /* Lightbox */
     #photoLightbox {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.85); display:none;
-      justify-content:center; align-items:center; z-index:10000;
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.85);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:10000;
     }
-    #photoLightbox img { max-width:90%; max-height:90%; border-radius:12px; }
-    #photoLightbox .close-lightbox {
-      position:absolute; top:20px; right:20px;
-      background:#1e88e5; color:white; border:none; padding:10px 15px;
-      border-radius:6px; cursor:pointer; font-size:16px;
+
+    #photoLightbox img {
+      max-width:90%;
+      max-height:90%;
+      border-radius:12px;
     }
-    #photoLightbox .close-lightbox:hover { background:#1565c0; }
   </style>
 </head>
 
 <body>
-  <header>
-    <div style="text-align:center; padding:10px; background:#f1f5fb;">
-      <button onclick="showPage('homePage')">Home</button>
-      <button onclick="showPage('profilePage')">Add Profile</button>
-      <button onclick="showPage('profilesPage')">Profiles</button>
-      <button onclick="showPage('aboutPage')">About</button>
-    </div>
-    <h1>Winnick Connection</h1>
-    <p>Meet and connect with students on campus</p>
-  </header>
 
-  <main>
-    <!-- Home Page -->
-    <div class="card page" id="homePage">
-      <h2>Welcome to Winnick Connection</h2>
-      <p>Connect with fellow students, share your profile, and explore campus life.</p>
-      <div style="display:flex; gap:15px; flex-wrap:wrap; margin-top:20px;">
-        <div class="card feature-card" onclick="showPage('profilesPage')">
-          <i class="fa-solid fa-users"></i>
-          <h3>View Profiles</h3>
-          <p>See all students on campus and connect with them.</p>
-        </div>
-        <div class="card feature-card" onclick="showPage('profilePage')">
-          <i class="fa-solid fa-user-plus"></i>
-          <h3>Add Your Profile</h3>
-          <p>Share your details and let others reach you easily.</p>
-        </div>
-        <div class="card feature-card" onclick="showPage('aboutPage')">
-          <i class="fa-solid fa-circle-info"></i>
-          <h3>About</h3>
-          <p>Learn more about this platform and how it works.</p>
-        </div>
-      </div>
-    </div>
+<header>
+  <div style="background:#f1f5fb;padding:10px;">
+    <button onclick="showPage('homePage')">Home</button>
+    <button onclick="showPage('profilePage')">Add Profile</button>
+    <button onclick="showPage('profilesPage')">Profiles</button>
+    <button onclick="showPage('aboutPage')">About</button>
+  </div>
+  <h1>Winnick Connection</h1>
+  <p>Meet and connect with students on campus</p>
+</header>
 
-    <!-- Create Profile Page -->
-    <div class="card page" id="profilePage" style="display:none;">
-      <h2>Create Your Profile</h2>
-      <input type="text" id="name" placeholder="Your Name">
-      <input type="text" id="course" placeholder="Course / Program">
-      <input type="text" id="contact" placeholder="Phone or WhatsApp">
-      <textarea id="about" placeholder="About you"></textarea>
-      <input type="file" id="photo" accept="image/*">
-      <button onclick="addProfile()">Add Profile</button>
-    </div>
+<main>
 
-   <!-- About Page -->
-<div class="card page" id="aboutPage" style="display:none;">
-  <h2>About Winnick Connection</h2>
-  <p>
-    This platform was built by <strong>Winnick Phiri</strong>, a student, to help fellow students on campus connect, share profiles, and communicate easily.
-  </p>
-  <p>
-    Students can:
-    <ul>
-      <li><strong>Add their profile</strong> with name, course, contact, photo, and a short bio.</li>
-      <li><strong>View other student profiles</strong> and reach out via WhatsApp or direct call.</li>
-      <li><strong>Search for classmates</strong> by name or course.</li>
-    </ul>
-  </p>
-  <p>
-    For suggestions, improvements, or to report any issues, you can reach me at:<br>
-    <strong>Email:</strong> <a href="mailto:winnickp720@gmail.com">winnickp720@gmail.com</a><br>
-    <strong>Phone/WhatsApp:</strong> <a href="tel:+260779888163">+260 77 988 8163</a>
-  </p>
+  <div class="card page" id="homePage">
+    <h2>Welcome to Winnick Connection</h2>
+    <p>Connect with fellow students, share your profile, and explore campus life.</p>
+  </div>
+
+  <div class="card page" id="profilePage" style="display:none;">
+    <h2>Create Your Profile</h2>
+    <input id="name" placeholder="Your Name">
+    <input id="course" placeholder="Course / Program">
+    <input id="contact" placeholder="Phone or WhatsApp">
+    <textarea id="about" placeholder="About you"></textarea>
+    <input type="file" id="photo" accept="image/*">
+    <button onclick="addProfile()">Add Profile</button>
+  </div>
+
+  <div class="card page" id="profilesPage" style="display:none;">
+    <h2>Student Profiles</h2>
+    <input id="search" placeholder="Search..." onkeyup="searchProfiles()">
+    <div id="profiles"></div>
+  </div>
+
+  <div class="card page" id="aboutPage" style="display:none;">
+    <h2>About</h2>
+    <p>Built by <strong>Winnick Phiri</strong> for students.</p>
+    <p>Email: winnickp720@gmail.com<br>Phone: +260 77 988 8163</p>
+  </div>
+
+</main>
+
+<footer>Winnick Connection © 2026</footer>
+
+<!-- Welcome popup -->
+<div id="welcomeModal">
+  <div class="modal-box">
+    <h3>Welcome!</h3>
+    <p>Connect and explore campus life.</p>
+    <button onclick="closeWelcome()">Get Started</button>
+  </div>
 </div>
 
-
-    <!-- Profiles Page -->
-    <div class="card page" id="profilesPage" style="display:none;">
-      <h2>Student Profiles</h2>
-      <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
-      <div id="profiles"></div>
-    </div>
-  </main>
-
-  <footer>
-    Winnick Connection © 2026 | Built for learning
-  </footer>
-
-  <!-- Welcome Popup -->
-  <div id="welcomeModal">
-    <div class="modal-content">
-      <h2>Welcome to Winnick Connection!</h2>
-      <p>Connect, share, and explore campus life with fellow students.</p>
-      <button class="close-btn" onclick="closeWelcome()">Get Started</button>
-    </div>
+<!-- Profile added popup -->
+<div id="profileAddedModal">
+  <div class="modal-box">
+    <h3>✅ Profile Uploaded</h3>
+    <p>Your profile was added successfully.</p>
+    <button onclick="goToProfiles()">View Profile</button>
   </div>
+</div>
 
-  <!-- Photo Lightbox -->
-  <div id="photoLightbox">
-    <button class="close-lightbox" onclick="closeLightbox()">X</button>
-    <img id="lightboxImg" src="">
-  </div>
+<!-- Lightbox -->
+<div id="photoLightbox" onclick="closeLightbox()">
+  <img id="lightboxImg">
+</div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwLrCKI3pFQGBp9RHunEOMchratxl5va0",
-      authDomain: "winnickconnection.firebaseapp.com",
-      databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com",
-      projectId: "winnickconnection",
-      storageBucket: "winnickconnection.firebasestorage.app",
-      messagingSenderId: "591164149666",
-      appId: "1:591164149666:web:858da589fbd596948aacfb"
-    };
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBwLrCKI3pFQGBp9RHunEOMchratxl5va0",
+  databaseURL: "https://winnickconnection-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const profilesRef = db.ref("profiles");
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const profilesRef = database.ref('profiles');
+function addProfile(){
+  const name=nameInput.value;
+  const course=courseInput.value;
+  const contact=contactInput.value;
+  const about=aboutInput.value;
+  const photoFile=photo.files[0];
 
-    function addProfile() {
-      const name = document.getElementById('name').value;
-      const course = document.getElementById('course').value;
-      const contact = document.getElementById('contact').value;
-      const about = document.getElementById('about').value;
-      const photoInput = document.getElementById('photo');
-      let photoURL = "";
+  function save(photoURL=""){
+    profilesRef.push({name,course,contact,about,photo:photoURL});
+    document.getElementById("profileAddedModal").style.display="flex";
+  }
 
-      if (photoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          photoURL = e.target.result;
-          saveProfile();
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-      } else { saveProfile(); }
+  if(photoFile){
+    const r=new FileReader();
+    r.onload=e=>save(e.target.result);
+    r.readAsDataURL(photoFile);
+  } else save();
+}
 
-      function saveProfile() {
-        if(!name || !course || !contact){ alert('Please fill in name, course, and contact'); return; }
-        profilesRef.push({ name, course, contact, about, photo: photoURL });
-        document.getElementById('name').value='';
-        document.getElementById('course').value='';
-        document.getElementById('contact').value='';
-        document.getElementById('about').value='';
-        document.getElementById('photo').value='';
-      }
-    }
+profilesRef.on("value",snap=>{
+  profiles.innerHTML="";
+  const data=snap.val()||{};
+  Object.values(data).forEach(p=>{
+    profiles.innerHTML+=`
+    <div class="card">
+      ${p.photo?`<img src="${p.photo}" width="60" style="border-radius:50%;cursor:pointer" onclick="openLightbox('${p.photo}')">`:""}
+      <h3>${p.name}</h3>
+      <p>${p.course}</p>
+      <a class="whatsapp-btn" href="https://wa.me/260${p.contact.replace(/\D/g,'')}" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+    </div>`;
+  });
+});
 
-    function uploadPhoto(key) {
-      const fileInput = document.getElementById(`photo-${key}`);
-      const file = fileInput.files[0];
-      if(!file){ alert("Please select a photo to upload."); return; }
-      const reader = new FileReader();
-      reader.onload=function(e){ profilesRef.child(key).update({ photo:e.target.result }); alert("Photo uploaded!"); }
-      reader.readAsDataURL(file);
-    }
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
+}
 
-    function searchProfiles() {
-      const searchText=document.getElementById('search').value.toLowerCase();
-      document.querySelectorAll('#profiles .card').forEach(card=>{
-        const text=card.innerText.toLowerCase();
-        card.style.display=text.includes(searchText)?'block':'none';
-      });
-    }
+function closeWelcome(){ welcomeModal.style.display="none"; }
+function goToProfiles(){ profileAddedModal.style.display="none"; showPage("profilesPage"); }
+function openLightbox(src){ lightboxImg.src=src; photoLightbox.style.display="flex"; }
+function closeLightbox(){ photoLightbox.style.display="none"; }
 
-    window.onload=function() {
-      document.getElementById('welcomeModal').style.display='flex';
-      profilesRef.on('value', snapshot=>{
-        const profilesContainer=document.getElementById('profiles');
-        profilesContainer.innerHTML='';
-        const profiles=snapshot.val();
-        if(profiles){
-          Object.entries(profiles).forEach(([key, profile])=>{
-            const profileDiv=document.createElement('div');
-            profileDiv.className='card';
-            let photoSection='';
-            if(profile.photo && profile.photo!==""){
-              // Add onclick to open lightbox
-              photoSection=`<img src="${profile.photo}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;cursor:pointer;" onclick="openLightbox('${profile.photo}')">`;
-            } else {
-              photoSection=`<label for="photo-${key}" style="cursor:pointer; font-size:12px; color:#1e88e5; font-weight:bold; display:inline-block; border:1px solid #1e88e5; padding:4px 6px; border-radius:4px;">+ Add Photo</label>
-                <input type="file" id="photo-${key}" accept="image/*" style="display:none;" onchange="uploadPhoto('${key}')">`;
-            }
+window.onload=()=>welcomeModal.style.display="flex";
+</script>
 
-            profileDiv.innerHTML=`
-              <div style="display:flex; align-items:center; gap:12px;">
-                ${photoSection}
-                <div style="flex:1;">
-                  <h3 style="margin:0; font-size:16px;">${profile.name}</h3>
-                  <p style="margin:2px 0; font-size:14px;"><strong>Course:</strong> ${profile.course}</p>
-                  <p style="margin:2px 0; font-size:14px;">
-                    <a href="https://wa.me/260${profile.contact.replace(/^0+|[^0-9]/g,'')}" target="_blank" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a> | <a href="tel:${profile.contact}">Call</a>
-                  </p>
-                  <p style="margin:2px 0; font-size:14px;">${profile.about}</p>
-                </div>
-              </div>`;
-            profilesContainer.appendChild(profileDiv);
-          });
-        }
-      });
-    }
-
-    function closeWelcome(){ document.getElementById('welcomeModal').style.display='none'; }
-    function showPage(pageId){
-      document.querySelectorAll('.page').forEach(page=>page.style.display='none');
-      document.getElementById(pageId).style.display='block';
-    }
-
-    // Lightbox functions
-    function openLightbox(src){
-      document.getElementById('lightboxImg').src=src;
-      document.getElementById('photoLightbox').style.display='flex';
-    }
-    function closeLightbox(){
-      document.getElementById('photoLightbox').style.display='none';
-      document.getElementById('lightboxImg').src='';
-    }
-  </script>
 </body>
 </html>

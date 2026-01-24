@@ -46,6 +46,12 @@
       margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
     }
 
     .card h2 {
@@ -118,36 +124,22 @@
       background-color: #1ebe5d;
     }
 
-    /* Modal styles for image zoom */
-    #imageModal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.8);
-    }
-
-    #imageModal img {
-      margin: auto;
-      display: block;
-      max-width: 90%;
-      max-height: 90%;
-      margin-top: 5%;
-      border-radius: 12px;
-    }
-
-    #imageModal span {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
+    /* Feature card styles */
+    .feature-card {
       cursor: pointer;
+      text-align: center;
+    }
+
+    .feature-card i {
+      font-size: 40px;
+      color: #1e88e5;
+      margin-bottom: 10px;
+    }
+
+    .feature-card h3 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #1565c0;
     }
 
     @media only screen and (max-width: 600px) {
@@ -157,6 +149,50 @@
       .card { padding: 15px; }
       input, textarea, #search, button { font-size: 13px; padding: 10px; }
       button { font-size: 14px; }
+    }
+
+    /* Popup modal */
+    #welcomeModal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      display: none;
+    }
+
+    #welcomeModal .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    #welcomeModal .modal-content h2 {
+      color: #1e88e5;
+      margin-bottom: 15px;
+    }
+
+    #welcomeModal .modal-content p {
+      margin-bottom: 20px;
+    }
+
+    #welcomeModal .close-btn {
+      background: #1e88e5;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+    }
+
+    #welcomeModal .close-btn:hover {
+      background: #1565c0;
     }
   </style>
 </head>
@@ -169,7 +205,6 @@
       <button onclick="showPage('profilesPage')">Profiles</button>
       <button onclick="showPage('aboutPage')">About</button>
     </div>
-
     <h1>Winnick Connection</h1>
     <p>Meet and connect with students on campus</p>
   </header>
@@ -178,14 +213,24 @@
     <!-- Home Page -->
     <div class="card page" id="homePage">
       <h2>Welcome to Winnick Connection</h2>
-      <p>
-        Winnick Connection is a student-built platform to help students
-        connect, communicate, and support one another on campus.
-      </p>
-      <p>
-        Add your profile, find fellow students, and reach out easily using
-        WhatsApp or direct calls.
-      </p>
+      <p>Connect with fellow students, share your profile, and explore campus life.</p>
+      <div style="display:flex; gap:15px; flex-wrap:wrap; margin-top:20px;">
+        <div class="card feature-card" onclick="showPage('profilesPage')">
+          <i class="fa-solid fa-users"></i>
+          <h3>View Profiles</h3>
+          <p>See all students on campus and connect with them.</p>
+        </div>
+        <div class="card feature-card" onclick="showPage('profilePage')">
+          <i class="fa-solid fa-user-plus"></i>
+          <h3>Add Your Profile</h3>
+          <p>Share your details and let others reach you easily.</p>
+        </div>
+        <div class="card feature-card" onclick="showPage('aboutPage')">
+          <i class="fa-solid fa-circle-info"></i>
+          <h3>About</h3>
+          <p>Learn more about this platform and how it works.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Create Profile Page -->
@@ -202,14 +247,8 @@
     <!-- About Page -->
     <div class="card page" id="aboutPage" style="display:none;">
       <h2>About Winnick Connection</h2>
-      <p>
-        This platform was built by a student, for students,
-        to help campus communities stay connected.
-      </p>
-      <p>
-        Suggestions and improvements are welcome so the system
-        can grow better together.
-      </p>
+      <p>This platform was built by a student, for students, to help campus communities stay connected.</p>
+      <p>Suggestions and improvements are welcome so the system can grow better together.</p>
     </div>
 
     <!-- Profiles Page -->
@@ -220,15 +259,18 @@
     </div>
   </main>
 
-  <!-- Modal for zooming image -->
-  <div id="imageModal">
-    <span onclick="closeModal()">&times;</span>
-    <img id="modalImg" src="">
-  </div>
-
   <footer>
     Winnick Connection © 2026 | Built for learning
   </footer>
+
+  <!-- Welcome Popup -->
+  <div id="welcomeModal">
+    <div class="modal-content">
+      <h2>Welcome to Winnick Connection!</h2>
+      <p>Connect, share, and explore campus life with fellow students.</p>
+      <button class="close-btn" onclick="closeWelcome()">Get Started</button>
+    </div>
+  </div>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -284,7 +326,6 @@
           photo: photoURL
         });
 
-        // Clear form
         document.getElementById('name').value = '';
         document.getElementById('course').value = '';
         document.getElementById('contact').value = '';
@@ -322,8 +363,11 @@
       });
     }
 
-    // Load Profiles and add click-to-enlarge for images
+    // Load Profiles
     window.onload = function() {
+      // Show welcome popup once
+      document.getElementById('welcomeModal').style.display = 'flex';
+
       profilesRef.on('value', snapshot => {
         const profilesContainer = document.getElementById('profiles');
         profilesContainer.innerHTML = '';
@@ -334,10 +378,9 @@
             const profileDiv = document.createElement('div');
             profileDiv.className = 'card';
 
-            // Photo or small Add Photo button
             let photoSection = '';
             if (profile.photo && profile.photo !== "") {
-              photoSection = `<img src="${profile.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; cursor:pointer;" onclick="openModal('${profile.photo}')">`;
+              photoSection = `<img src="${profile.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">`;
             } else {
               photoSection = `
                 <label for="photo-${key}" style="cursor:pointer; font-size:12px; color:#1e88e5; font-weight:bold; display:inline-block; border:1px solid #1e88e5; padding:4px 6px; border-radius:4px;">
@@ -370,24 +413,18 @@
       });
     };
 
-    // Page navigation (SAFE – UI ONLY)
+    // Close Welcome popup
+    function closeWelcome() {
+      document.getElementById('welcomeModal').style.display = 'none';
+    }
+
+    // Page navigation
     function showPage(pageId) {
       const pages = document.querySelectorAll('.page');
       pages.forEach(page => {
         page.style.display = 'none';
       });
       document.getElementById(pageId).style.display = 'block';
-    }
-
-    // Open modal to show big image
-    function openModal(src) {
-      document.getElementById('modalImg').src = src;
-      document.getElementById('imageModal').style.display = 'block';
-    }
-
-    // Close modal
-    function closeModal() {
-      document.getElementById('imageModal').style.display = 'none';
     }
   </script>
 </body>

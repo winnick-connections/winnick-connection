@@ -264,6 +264,7 @@
       function saveProfile() {
         if(!name || !course || !contact){ alert('Please fill in name, course, and contact'); return; }
         profilesRef.push({ name, course, contact, about, photo: photoURL });
+        document.getElementById('profileSuccess').style.display = 'flex';
         document.getElementById('name').value='';
         document.getElementById('course').value='';
         document.getElementById('contact').value='';
@@ -271,6 +272,10 @@
         document.getElementById('photo').value='';
       }
     }
+function goToProfiles() {
+  document.getElementById('profileSuccess').style.display = 'none';
+  showPage('profilesPage');
+}
 
     function uploadPhoto(key) {
       const fileInput = document.getElementById(`photo-${key}`);
@@ -341,6 +346,26 @@
       document.getElementById('photoLightbox').style.display='none';
       document.getElementById('lightboxImg').src='';
     }
+    <div id="profileSuccess"
+     style="display:none;
+            position:fixed;
+            top:0;left:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.6);
+            z-index:9999;
+            align-items:center;
+            justify-content:center;">
+  <div style="background:#fff;
+              padding:20px;
+              border-radius:10px;
+              text-align:center;
+              max-width:300px;">
+    <h3>✅ Profile Added</h3>
+    <p>Your profile was added successfully.</p>
+    <button onclick="goToProfiles()">View Profiles</button>
+  </div>
+</div>
+
   </script>
 </body>
 </html>

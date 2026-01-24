@@ -176,48 +176,57 @@
 
   <main>
     <!-- Home Page -->
-    <div class="card page" id="homePage">
-      <h2>Welcome to Winnick Connection</h2>
-      <p>
-        Winnick Connection is a student-built platform to help students
-        connect, communicate, and support one another on campus.
-      </p>
-      <p>
-        Add your profile, find fellow students, and reach out easily using
-        WhatsApp or direct calls.
-      </p>
-    </div>
+<div class="card page" id="homePage">
+  <div style="position:relative; text-align:center; margin-bottom:20px;">
+    <img src="https://images.unsplash.com/photo-1581090700227-7b522c7b0e34?auto=format&fit=crop&w=900&q=80" 
+         alt="Campus" 
+         style="width:100%; max-height:250px; object-fit:cover; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.2);">
+    <h2 style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:white; 
+               background: rgba(0,0,0,0.4); padding:10px 20px; border-radius:8px; font-size:28px; 
+               font-weight:bold; animation: fadeInText 2s ease-in-out;">Welcome to Winnick Connection!</h2>
+  </div>
 
-    <!-- Create Profile Page -->
-    <div class="card page" id="profilePage" style="display:none;">
-      <h2>Create Your Profile</h2>
-      <input type="text" id="name" placeholder="Your Name">
-      <input type="text" id="course" placeholder="Course / Program">
-      <input type="text" id="contact" placeholder="Phone or WhatsApp">
-      <textarea id="about" placeholder="About you"></textarea>
-      <input type="file" id="photo" accept="image/*">
-      <button onclick="addProfile()">Add Profile</button>
-    </div>
+  <p style="font-size:16px; text-align:center; margin-bottom:30px; color:#333;">
+    A campus hub for students to <strong>connect, share, and grow together</strong>.  
+    Add your profile, explore fellow students, and communicate directly via WhatsApp or calls.
+  </p>
 
-    <!-- About Page -->
-    <div class="card page" id="aboutPage" style="display:none;">
-      <h2>About Winnick Connection</h2>
-      <p>
-        This platform was built by a student, for students,
-        to help campus communities stay connected.
-      </p>
-      <p>
-        Suggestions and improvements are welcome so the system
-        can grow better together.
-      </p>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-bottom:20px;">
+    <div style="flex:1 1 200px; background:#1e88e5; color:white; padding:15px; border-radius:10px; 
+                box-shadow:0 8px 15px rgba(0,0,0,0.1); text-align:center; cursor:pointer; transition: transform 0.3s;">
+      <i class="fa-solid fa-user-plus" style="font-size:28px; margin-bottom:8px;"></i>
+      <h3>Add Profile</h3>
+      <p>Create your student profile easily</p>
     </div>
+    <div style="flex:1 1 200px; background:#1565c0; color:white; padding:15px; border-radius:10px; 
+                box-shadow:0 8px 15px rgba(0,0,0,0.1); text-align:center; cursor:pointer; transition: transform 0.3s;">
+      <i class="fa-solid fa-users" style="font-size:28px; margin-bottom:8px;"></i>
+      <h3>Find Friends</h3>
+      <p>Search and explore fellow students</p>
+    </div>
+    <div style="flex:1 1 200px; background:#25D366; color:white; padding:15px; border-radius:10px; 
+                box-shadow:0 8px 15px rgba(0,0,0,0.1); text-align:center; cursor:pointer; transition: transform 0.3s;">
+      <i class="fa-brands fa-whatsapp" style="font-size:28px; margin-bottom:8px;"></i>
+      <h3>WhatsApp Connect</h3>
+      <p>Reach out directly via WhatsApp</p>
+    </div>
+  </div>
 
-    <!-- Profiles Page -->
-    <div class="card page" id="profilesPage" style="display:none;">
-      <h2>Student Profiles</h2>
-      <input type="text" id="search" placeholder="Search by name or course..." onkeyup="searchProfiles()">
-      <div id="profiles"></div>
-    </div>
+  <p style="font-size:14px; text-align:center; color:#666;">
+    Explore, connect, and make your campus life more engaging!
+  </p>
+</div>
+
+<style>
+@keyframes fadeInText {
+  0% {opacity:0; transform:translate(-50%, -60%);}
+  100% {opacity:1; transform:translate(-50%, -50%);}
+}
+.card div:hover {
+  transform: translateY(-5px);
+}
+</style>
+
   </main>
 
   <!-- Modal for zooming image -->

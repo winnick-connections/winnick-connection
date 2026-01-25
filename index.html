@@ -127,6 +127,18 @@
     }
     #photoLightbox .close-lightbox:hover { background:#1565c0; }
 
+    /* Loading popup */
+    #loadingPopup {
+      display:none; 
+      position:fixed; top:0; left:0; width:100%; height:100%; 
+      background:rgba(0,0,0,0.5); display:flex; 
+      justify-content:center; align-items:center; z-index:99999;
+    }
+    #loadingPopup div {
+      background:white; padding:25px 30px; border-radius:12px; 
+      font-size:16px; color:#1e88e5; font-weight:bold; 
+      box-shadow:0 10px 20px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 
@@ -135,7 +147,7 @@
     <div style="text-align:center; padding:10px; background:#f1f5fb;">
       <button onclick="showPage('homePage')">Home</button>
       <button onclick="showPage('profilePage')">Add Profile</button>
-      <button onclick="showPage('profilesPage')">Profiles</button>
+      <button onclick="loadProfiles()">Profiles</button>
       <button onclick="showPage('aboutPage')">About</button>
     </div>
     <h1>Winnick Connection</h1>
@@ -225,14 +237,9 @@
     <img id="lightboxImg" src="">
   </div>
 
-  <!-- Loading Profiles Popup -->
-  <div id="loadingPopup" style="display:none; position:fixed; top:0; left:0; 
-       width:100%; height:100%; background:rgba(0,0,0,0.5); 
-       display:flex; justify-content:center; align-items:center; z-index:99999;">
-    <div style="background:white; padding:25px 30px; border-radius:12px; 
-                font-size:16px; color:#1e88e5; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2);">
-      Loading profiles...
-    </div>
+  <!-- Loading Popup -->
+  <div id="loadingPopup">
+    <div>Loading profiles...</div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -253,14 +260,6 @@
     const app = firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const profilesRef = database.ref('profiles');
-
-    // Show/hide loading popup
-    function showLoadingPopup() {
-      document.getElementById('loadingPopup').style.display = 'flex';
-    }
-    function hideLoadingPopup() {
-      document.getElementById('loadingPopup').style.display = 'none';
-    }
 
     function addProfile() {
       const name = document.getElementById('name').value;
@@ -287,7 +286,7 @@
         document.getElementById('contact').value='';
         document.getElementById('about').value='';
         document.getElementById('photo').value='';
-        alert("Your profile has been added!"); // existing add-profile message
+        alert('Profile added successfully!');
       }
     }
 
@@ -310,10 +309,7 @@
 
     window.onload=function() {
       document.getElementById('welcomeModal').style.display='flex';
-
       profilesRef.on('value', snapshot=>{
-        showLoadingPopup(); // show popup while loading
-
         const profilesContainer=document.getElementById('profiles');
         profilesContainer.innerHTML='';
         const profiles=snapshot.val();
@@ -344,8 +340,6 @@
             profilesContainer.appendChild(profileDiv);
           });
         }
-
-        hideLoadingPopup(); // hide popup when done
       });
     }
 
@@ -363,6 +357,17 @@
     function closeLightbox(){
       document.getElementById('photoLightbox').style.display='none';
       document.getElementById('lightboxImg').src='';
+    }
+
+    // Loading popup functions
+    function showLoadingPopup() { document.getElementById('loadingPopup').style.display='flex'; }
+    function hideLoadingPopup() { document.getElementById('loadingPopup').style.display='none'; }
+
+    // Profiles page loader
+    function loadProfiles() {
+      showLoadingPopup();
+      showPage('profilesPage');
+      setTimeout(() => { hideLoadingPopup(); }, 100); // very short delay just to render popup
     }
   </script>
 </body>

@@ -147,11 +147,12 @@
       <h2>Welcome to Winnick Connection</h2>
       <p>Connect with fellow students, share your profile, and explore campus life.</p>
       <div style="display:flex; gap:15px; flex-wrap:wrap; margin-top:20px;">
-        <div class="card feature-card" onclick="showPage('profilesPage')">
-          <i class="fa-solid fa-users"></i>
-          <h3>View Profiles</h3>
-          <p>See all students on campus and connect with them.</p>
-        </div>
+        <div class="card feature-card" onclick="showPage('profilesPage'); showLoadingPopup();">
+  <i class="fa-solid fa-users"></i>
+  <h3>View Profiles</h3>
+  <p>See all students on campus and connect with them.</p>
+</div>
+
         <div class="card feature-card" onclick="showPage('profilePage')">
           <i class="fa-solid fa-user-plus"></i>
           <h3>Add Your Profile</h3>
@@ -364,6 +365,13 @@ window.onscroll = function() {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+function showLoadingPopup() {
+  const popup = document.getElementById('loadingPopup');
+  popup.style.display = 'flex';  // show popup
+  setTimeout(() => {
+    popup.style.display = 'none'; // hide after 4.5 seconds
+  }, 4500);
+}
 
   </script>
   <!-- Back to Top Button -->
@@ -374,6 +382,15 @@ function scrollToTop() {
            cursor:pointer; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
   ↑ Top
 </button>
+<!-- Loading Profiles Popup -->
+<div id="loadingPopup" style="display:none; position:fixed; top:0; left:0; 
+     width:100%; height:100%; background:rgba(0,0,0,0.5); 
+     display:flex; justify-content:center; align-items:center; z-index:99999;">
+  <div style="background:white; padding:25px 30px; border-radius:12px; 
+              font-size:16px; color:#1e88e5; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2);">
+    Loading profiles...
+  </div>
+</div>
 
 </body>
 </html>

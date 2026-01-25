@@ -126,19 +126,6 @@
       border-radius:6px; cursor:pointer; font-size:16px;
     }
     #photoLightbox .close-lightbox:hover { background:#1565c0; }
-
-    /* Loading popup */
-    #loadingPopup {
-      display:none; 
-      position:fixed; top:0; left:0; width:100%; height:100%; 
-      background:rgba(0,0,0,0.5); display:flex; 
-      justify-content:center; align-items:center; z-index:99999;
-    }
-    #loadingPopup div {
-      background:white; padding:25px 30px; border-radius:12px; 
-      font-size:16px; color:#1e88e5; font-weight:bold; 
-      box-shadow:0 10px 20px rgba(0,0,0,0.2);
-    }
   </style>
 </head>
 
@@ -147,7 +134,7 @@
     <div style="text-align:center; padding:10px; background:#f1f5fb;">
       <button onclick="showPage('homePage')">Home</button>
       <button onclick="showPage('profilePage')">Add Profile</button>
-      <button onclick="loadProfiles()">Profiles</button>
+      <button onclick="showPage('profilesPage')">Profiles</button>
       <button onclick="showPage('aboutPage')">About</button>
     </div>
     <h1>Winnick Connection</h1>
@@ -187,6 +174,10 @@
       <textarea id="about" placeholder="About you"></textarea>
       <input type="file" id="photo" accept="image/*">
       <button onclick="addProfile()">Add Profile</button>
+      <p id="successMsg" style="display:none; color:green; font-weight:bold; margin-top:10px;">
+  ✅ Profile added successfully. Go to Profiles to view it.
+</p>
+
     </div>
 
    <!-- About Page -->
@@ -209,6 +200,7 @@
     <strong>Phone/WhatsApp:</strong> <a href="tel:+260779888163">+260 77 988 8163</a>
   </p>
 </div>
+
 
     <!-- Profiles Page -->
     <div class="card page" id="profilesPage" style="display:none;">
@@ -235,11 +227,6 @@
   <div id="photoLightbox">
     <button class="close-lightbox" onclick="closeLightbox()">X</button>
     <img id="lightboxImg" src="">
-  </div>
-
-  <!-- Loading Popup -->
-  <div id="loadingPopup">
-    <div>Loading profiles...</div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -281,12 +268,16 @@
       function saveProfile() {
         if(!name || !course || !contact){ alert('Please fill in name, course, and contact'); return; }
         profilesRef.push({ name, course, contact, about, photo: photoURL });
+        document.getElementById('successMsg').style.display = 'block';
+setTimeout(() => {
+  document.getElementById('successMsg').style.display = 'none';
+}, 3000);
+
         document.getElementById('name').value='';
         document.getElementById('course').value='';
         document.getElementById('contact').value='';
         document.getElementById('about').value='';
         document.getElementById('photo').value='';
-        alert('Profile added successfully!');
       }
     }
 
@@ -319,6 +310,7 @@
             profileDiv.className='card';
             let photoSection='';
             if(profile.photo && profile.photo!==""){
+              // Add onclick to open lightbox
               photoSection=`<img src="${profile.photo}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;cursor:pointer;" onclick="openLightbox('${profile.photo}')">`;
             } else {
               photoSection=`<label for="photo-${key}" style="cursor:pointer; font-size:12px; color:#1e88e5; font-weight:bold; display:inline-block; border:1px solid #1e88e5; padding:4px 6px; border-radius:4px;">+ Add Photo</label>
@@ -358,17 +350,30 @@
       document.getElementById('photoLightbox').style.display='none';
       document.getElementById('lightboxImg').src='';
     }
+    // Show Back to Top button on scroll
+window.onscroll = function() {
+  const btn = document.getElementById('backToTop');
+  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+    btn.style.display = 'block';
+  } else {
+    btn.style.display = 'none';
+  }
+};
 
-    // Loading popup functions
-    function showLoadingPopup() { document.getElementById('loadingPopup').style.display='flex'; }
-    function hideLoadingPopup() { document.getElementById('loadingPopup').style.display='none'; }
+// Scroll to top smoothly
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    // Profiles page loader
-    function loadProfiles() {
-      showLoadingPopup();
-      showPage('profilesPage');
-      setTimeout(() => { hideLoadingPopup(); }, 100); // very short delay just to render popup
-    }
   </script>
+  <!-- Back to Top Button -->
+<button id="backToTop" onclick="scrollToTop()" 
+    style="position:fixed; bottom:20px; right:20px; display:none; 
+           padding:10px 15px; font-size:14px; border:none; 
+           border-radius:8px; background:#1e88e5; color:white; 
+           cursor:pointer; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+  ↑ Top
+</button>
+
 </body>
 </html>
